@@ -10,6 +10,8 @@ import { authChecker } from "./modules/user/authChecker"
 import { LoginResolver } from "./modules/user/Login"
 import { RegisterResolver } from "./modules/user/Register"
 import { AuthorizationResolver } from "./modules/user/Authorization"
+import { existsSync } from "fs"
+import chalk from "chalk"
 
 const port = process.env.PORT || 4000
 
@@ -48,6 +50,22 @@ const main = async () => {
     const { PROTOCOL, DOMAIN } = process.env
     console.log(`Server up on ${PROTOCOL}${DOMAIN}:${port}/api`)
   })
+}
+
+// Check environment and configuration exist
+const envExists = existsSync(".env")
+const configExists = existsSync("app.config.json")
+const bothExist = envExists && configExists
+
+const existsString = `${!envExists ? ".env" : ""}${
+  !envExists && !configExists ? " and " : ""
+}${!configExists ? "app.config.json" : ""} ${
+  !envExists && !configExists ? "don't" : "doesn't"
+} exist. Run ${chalk.green("npm run setup")} to setup.`
+
+if (!bothExist) {
+  console.log(existsString)
+  process.exit()
 }
 
 main()
