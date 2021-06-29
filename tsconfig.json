@@ -73,10 +73,5 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "exclude": ["node_modules"],
-  "include": [
-    "./src/**/*.tsx",
-    "./src/**/*.ts",
-    "src/contexts/ExpressContext.ts",
-    "src/contexts/ExpressContext.ts"
-  ]
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

@@ -1,10 +1,4 @@
-import {
-  BaseEntity,
-  Entity,
-  PrimaryKey,
-  Property,
-  SerializedPrimaryKey,
-} from "@mikro-orm/core"
+import { Entity, Property, SerializedPrimaryKey } from "@mikro-orm/core"
 import { Field, ID, ObjectType } from "type-graphql"
 import { Base } from "./Base"
 
@@ -25,4 +19,7 @@ export default class User extends Base<User> {
 
   @Property()
   password: string
+
+  @Property()
+  refreshTokenCount: number = 0
 }

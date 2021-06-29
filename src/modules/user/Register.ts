@@ -6,11 +6,6 @@ import { ExpressContext } from "../../contexts/ExpressContext"
 
 @Resolver(type => User)
 export class RegisterResolver {
-  @Query(() => String)
-  async me() {
-    return "hello"
-  }
-
   @Mutation(type => User)
   async register(
     @Arg("input") { name, email, password }: RegisterInput,

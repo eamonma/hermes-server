@@ -6,15 +6,15 @@ import { Field, ID, ObjectType } from "type-graphql"
 export class Base<T extends { id: string }> extends BaseEntity<T, "id"> {
   @Field(type => ID)
   @PrimaryKey()
-  public _id: ObjectId
+  _id: ObjectId
 
   @Field()
   @Property()
-  public createdAt: Date = new Date()
+  createdAt: Date = new Date()
 
   @Field()
   @Property({ onUpdate: () => new Date() })
-  public updatedAt: Date = new Date()
+  updatedAt: Date = new Date()
 
   constructor(body = {}) {
     super()

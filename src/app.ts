@@ -2,21 +2,21 @@ import { MikroORM } from "@mikro-orm/core"
 import { ApolloServer } from "apollo-server-express"
 import cors from "cors"
 import express from "express"
-import passport from "passport"
+import process from "process"
 import "reflect-metadata"
 import { buildSchema } from "type-graphql"
 import User from "./entity/User"
+import { authChecker } from "./modules/user/authChecker"
 import { LoginResolver } from "./modules/user/Login"
 import { RegisterResolver } from "./modules/user/Register"
+import { AuthorizationResolver } from "./modules/user/Authorization"
 
 const port = process.env.PORT || 4000
+
 const main = async () => {
-  console.log(process.env.DB)
-
-  // mongoose.connect(process.env!.DB)
-
   const schema = await buildSchema({
-    resolvers: [LoginResolver, RegisterResolver],
+    resolvers: [LoginResolver, RegisterResolver, AuthorizationResolver],
+    authChecker,
   })
 
   const orm = await MikroORM.init({
@@ -37,8 +37,9 @@ const main = async () => {
 
   const app = express()
 
+  app.disable("x-powered-by")
+
   app.use(cors())
-  app.use(passport.initialize())
   apolloServer.applyMiddleware({ app, path: "/api" })
 
   app.listen(port, () => {
