@@ -1,4 +1,5 @@
 {
-	"domain": "starlide.com",
-	"enableRegistration": false
+  "registration": false,
+  "guardRegistrationDomain": true,
+  "domain": "starlide.com"
 }

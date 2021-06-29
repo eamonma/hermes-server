@@ -17,7 +17,7 @@ import config from "../../../app.config.json"
 @Resolver()
 export class RegisterResolver {
   @Mutation(type => User)
-  @UseMiddleware(Disabled(!config.enableRegistration))
+  @UseMiddleware(Disabled(!config.registration))
   async register(
     @Arg("input") { name, email, password }: RegisterInput,
     @Ctx() ctx: ExpressContext

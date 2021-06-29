@@ -4,6 +4,8 @@ import {
   ValidationArguments,
 } from "class-validator"
 
+import config from "../../../../app.config.json"
+
 export function IsDomain(
   property: string,
   validationOptions?: ValidationOptions
@@ -17,6 +19,9 @@ export function IsDomain(
       options: validationOptions,
       validator: {
         validate(value: string, args: ValidationArguments) {
+          if (!config.guardRegistrationDomain) return true
+          if (!config.domain) return true
+
           const [relatedPropertyName] = args.constraints
           const relatedValue = (args.object as any)[relatedPropertyName]
 
