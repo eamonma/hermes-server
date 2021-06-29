@@ -1,7 +1,7 @@
 import { verify } from "jsonwebtoken"
 import { AuthChecker } from "type-graphql"
 import { ExpressContext } from "../../contexts/ExpressContext"
-import User from "../../entity/User"
+import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
 export const authChecker: AuthChecker<ExpressContext> = async ({

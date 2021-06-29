@@ -3,14 +3,13 @@ import {
   Arg,
   Authorized,
   Ctx,
-  Field,
   Mutation,
   ObjectType,
   Query,
   Resolver,
 } from "type-graphql"
 import { ExpressContext } from "../../contexts/ExpressContext"
-import User from "../../entity/User"
+import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
 @Resolver()

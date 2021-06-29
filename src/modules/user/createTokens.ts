@@ -1,5 +1,5 @@
 import { sign } from "jsonwebtoken"
-import User from "../../entity/User"
+import User from "../../entities/User"
 
 export const createTokens = (
   user: User

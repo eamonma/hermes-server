@@ -7,7 +7,7 @@ import {
 import { Ctx } from "type-graphql"
 import { ExpressContext } from "../../../contexts/ExpressContext"
 
-import User from "../../../entity/User"
+import User from "../../../entities/User"
 
 @ValidatorConstraint({ async: true })
 export class IsEmailAlreadyExistConstraint
