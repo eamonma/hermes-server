@@ -13,15 +13,6 @@ import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entity/User"
 import { createTokens } from "./createTokens"
 
-@ObjectType()
-class LoggedInUser extends User {
-  @Field()
-  refreshToken: string = ""
-
-  @Field()
-  accessToken: string = ""
-}
-
 @Resolver()
 @ObjectType()
 export class LoginResolver {
@@ -38,19 +29,17 @@ export class LoginResolver {
 
   @Query()
   @Authorized()
-  me(@Ctx() ctx: ExpressContext): LoggedInUser {
-    const user = ctx.res.locals.user as LoggedInUser
-
-    return user
+  me(@Ctx() ctx: ExpressContext): User {
+    return ctx.res.locals.user
   }
 
-  @Mutation(type => LoggedInUser, { nullable: true })
+  @Mutation(type => User, { nullable: true })
   async login(
     @Arg("email") email: string,
     @Arg("password") password: string,
-    @Ctx() { em }: ExpressContext
-  ): Promise<LoggedInUser | null> {
-    const user = (await em.findOne(User, { email })) as LoggedInUser
+    @Ctx() { req, res, em }: ExpressContext
+  ): Promise<User | null> {
+    const user = (await em.findOne(User, { email })) as User
     if (!user) return null
 
     const valid = await argon2.verify(user.password, password)
@@ -58,8 +47,10 @@ export class LoginResolver {
 
     const { accessToken, refreshToken } = createTokens(user)
 
-    user.accessToken = accessToken
-    user.refreshToken = refreshToken
+    res.set({
+      "Token": accessToken,
+      "Refresh-Token": refreshToken,
+    })
 
     return user
   }

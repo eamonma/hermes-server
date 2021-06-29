@@ -12,8 +12,9 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
       "Bearer ",
       ""
     )
-    const refreshToken = req.header("RefreshToken") as string
+    const refreshToken = req.header("refresh-token") as string
 
+    // Guard for neither
     if (!accessToken && !refreshToken) return false
 
     // Check accessToken is valid
@@ -23,11 +24,10 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
         process.env.ACCESS_SECRET as string
       ) as { id: string }
 
-      console.log(`verfied: ${JSON.stringify(verified)}`)
-
       const { id } = verified
       const user = await em.findOne(User, { id })
 
+      // Guard for
       if (!user) return false
       res.locals.user = user
 
@@ -41,15 +41,13 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
         id: string
         refreshTokenCount: number
       }
-
-      console.log(data)
     } catch (error) {
       return false
     }
 
     const { id, refreshTokenCount } = data
 
-    const user = await em.findOne(User, { id })
+    const user = (await em.findOne(User, { id })) as User
 
     // invalid token
     if (!user || user.refreshTokenCount !== refreshTokenCount) return false
@@ -57,8 +55,11 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
     // valid refreshToken
     const { refreshToken: newRefreshToken, accessToken: newAccessToken } =
       createTokens(user)
-    res.locals.user.refreshToken = newRefreshToken
-    res.locals.user.accessToken = newAccessToken
+
+    res.set({
+      "Token": newAccessToken,
+      "Refresh-Token": newRefreshToken,
+    })
 
     return true
   } catch (err) {

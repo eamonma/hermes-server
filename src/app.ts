@@ -39,6 +39,8 @@ const main = async () => {
 
   app.disable("x-powered-by")
 
+  app.set("Access-Control-Expose-Headers", ["Token", "Refresh-Token"])
+
   app.use(cors())
   apolloServer.applyMiddleware({ app, path: "/api" })
 
