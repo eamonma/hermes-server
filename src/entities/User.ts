@@ -1,5 +1,7 @@
 import { Entity, Property, SerializedPrimaryKey } from "@mikro-orm/core"
+import { IsEmail } from "class-validator"
 import { Field, ID, ObjectType } from "type-graphql"
+import { IsDomain } from "../modules/user/register/isDomain"
 import { Base } from "./Base"
 
 @ObjectType()
@@ -15,6 +17,7 @@ export default class User extends Base<User> {
 
   @Field()
   @Property({ unique: true })
+  @IsEmail()
   email: string
 
   @Property()
