@@ -23,10 +23,9 @@ export default class File extends Base<File> {
 
   @Field()
   @Property()
-  url: string
+  key: string
 
-  @Field()
-  @Property()
+  @Field(type => Array)
   @ManyToOne(type => Project, { wrappedReference: true })
   project: IdentifiedReference<Project>
 

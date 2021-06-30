@@ -19,8 +19,7 @@ export default class Project extends Base<Project> {
   @Property()
   name: string
 
-  @Field()
-  @Property()
+  @Field(type => Array)
   @OneToMany(type => File, (file: File) => file.project)
   files: File[]
 }
