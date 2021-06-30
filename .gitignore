@@ -3,3 +3,5 @@ dist
 .env
 *.env
 app.config.json
+Dockerfile
+.dockerignore

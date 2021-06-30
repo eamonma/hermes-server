@@ -10,7 +10,6 @@ import {
 } from "type-graphql"
 import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entities/User"
-import { createTokens } from "./createTokens"
 
 @Resolver()
 @ObjectType()
@@ -32,25 +31,11 @@ export class LoginResolver {
     return ctx.res.locals.user
   }
 
-  @Mutation(type => User, { nullable: true })
-  async login(
-    @Arg("email") email: string,
-    @Arg("password") password: string,
+  @Mutation(type => [String])
+  async getMultipartUrls(
+    @Arg("size") size: number,
     @Ctx() { req, res, em }: ExpressContext
-  ): Promise<User | null> {
-    const user = (await em.findOne(User, { email })) as User
-    if (!user) return null
-
-    const valid = await argon2.verify(user.password, password)
-    if (!valid) return null
-
-    const { accessToken, refreshToken } = createTokens(user)
-
-    res.set({
-      "Token": accessToken,
-      "Refresh-Token": refreshToken,
-    })
-
-    return user
+  ): Promise<string[]> {
+    return [""]
   }
 }
