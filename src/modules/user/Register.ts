@@ -1,18 +1,11 @@
 import argon2 from "argon2"
-import {
-  Arg,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-  UseMiddleware,
-} from "type-graphql"
-import User from "../../entities/User"
-import { RegisterInput } from "./register/RegisterInput"
-import { ExpressContext } from "../../contexts/ExpressContext"
-import { createTokens } from "./createTokens"
-import { Disabled } from "../Disabled"
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql"
 import config from "../../../app.config.json"
+import { ExpressContext } from "../../contexts/ExpressContext"
+import User from "../../entities/User"
+import { Disabled } from "../Disabled"
+import { createTokens } from "./createTokens"
+import { RegisterInput } from "./register/RegisterInput"
 
 @Resolver()
 export class RegisterResolver {

@@ -1,6 +1,7 @@
 import prompts, { PromptObject } from "prompts"
 import { randomBytes } from "crypto"
-import { writeFile, existsSync } from "fs"
+import { promises as fs, existsSync } from "fs"
+const { writeFile } = fs
 import chalk from "chalk"
 
 const camelToUpperSnakeCase = (str: string): string => {
@@ -11,7 +12,7 @@ const envQuestions: PromptObject[] = [
   {
     type: "select",
     name: "nodeEnv",
-    message: "Productio or development environment?",
+    message: "Production or development environment?",
     choices: [
       {
         title: "development",
@@ -102,18 +103,14 @@ const configQuestions: PromptObject[] = [
       envFileString += "\n"
     }
 
-    writeFile(".env", envFileString, () => {})
+    await writeFile(".env", envFileString)
   } else {
     console.log(chalk.bold.red(".env already exists."))
   }
 
   if (!configExists) {
     const configResponse = await prompts(configQuestions)
-    writeFile(
-      "app.config.json",
-      JSON.stringify(configResponse, null, 2),
-      () => {}
-    )
+    await writeFile("app.config.json", JSON.stringify(configResponse, null, 2))
   } else {
     console.log(chalk.bold.red("app.config.json already exists."))
   }

@@ -1,5 +1,6 @@
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core"
 import { ApolloServer } from "apollo-server-express"
+import chalk from "chalk"
 import cors from "cors"
 import express from "express"
 import process from "process"
@@ -22,7 +23,7 @@ export default class Application {
     try {
       this.orm = await MikroORM.init(ormConfig)
     } catch (error) {
-      console.error("📌 Could not connect to the database", error)
+      console.error(chalk.red("📌 Could not connect to the database"), error)
       throw Error(error as string)
     }
   }
