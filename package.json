@@ -1,12 +1,13 @@
 {
   "name": "hermes-server",
   "version": "0.0.1",
-  "description": "",
+  "description": "A file transfer platform geared towards client delivery built with TypeScript, Node.js, GraphQL, and React.",
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
-    "start": "ts-node src/index.ts",
-    "start:compile": "tsc --project tsconfig.json && node dist/src/index.js",
+    "start:prod": "node dist/src/index.js",
+    "start:dev": "ts-node src/index.ts",
+    "start:compile": "rm -rf dist && NODE_ENV=production tsc --project tsconfig.json && NODE_ENV=production node dist/src/index.js",
     "setup": "ts-node setup.ts",
     "test": "jest"
   },

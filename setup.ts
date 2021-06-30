@@ -11,6 +11,7 @@ const envQuestions: PromptObject[] = [
   {
     type: "select",
     name: "nodeEnv",
+    message: "Productio or development environment?",
     choices: [
       {
         title: "development",
