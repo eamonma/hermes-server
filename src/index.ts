@@ -19,6 +19,7 @@ if (!bothExist) {
   process.exit()
 }
 
+// Run app
 import Application from "./application"
 ;(async () => {
   const application = new Application()

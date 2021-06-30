@@ -3,6 +3,7 @@ import { ApolloServer } from "apollo-server-express"
 import chalk from "chalk"
 import cors from "cors"
 import express from "express"
+import { Server } from "http"
 import process from "process"
 import "reflect-metadata"
 import { buildSchema } from "type-graphql"
@@ -20,6 +21,7 @@ const port = process.env.PORT || 4000
 export default class Application {
   orm: MikroORM<IDatabaseDriver<Connection>>
   app: express.Application
+  server: Server
 
   async connect(): Promise<void> {
     try {
@@ -59,7 +61,7 @@ export default class Application {
 
     apolloServer.applyMiddleware({ app: this.app, path: "/api" })
 
-    this.app.listen(port, () => {
+    this.server = this.app.listen(port, () => {
       const { PROTOCOL, DOMAIN } = process.env
       console.log(`Server up on ${PROTOCOL}${DOMAIN}:${port}/api`)
     })
