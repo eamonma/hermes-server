@@ -1,2 +1,2 @@
 # Hermes Server
-Server for the Hermes application
+A file transfer platform geared towards client delivery built with TypeScript, Node.js, GraphQL, and React.
