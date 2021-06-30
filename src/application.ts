@@ -8,6 +8,8 @@ import "reflect-metadata"
 import { buildSchema } from "type-graphql"
 import ormConfig from "../orm.config"
 import { ExpressContext } from "./contexts/ExpressContext"
+import { UploadResolver } from "./modules/file/Upload"
+import { CreateProjectResolver } from "./modules/project/CreateProject"
 import { authChecker } from "./modules/user/authChecker"
 import { AuthorizationResolver } from "./modules/user/Authorization"
 import { LoginResolver } from "./modules/user/Login"
@@ -31,7 +33,13 @@ export default class Application {
   async init(): Promise<void> {
     this.app = express()
     const schema = await buildSchema({
-      resolvers: [LoginResolver, RegisterResolver, AuthorizationResolver],
+      resolvers: [
+        LoginResolver,
+        RegisterResolver,
+        AuthorizationResolver,
+        UploadResolver,
+        CreateProjectResolver,
+      ],
       authChecker,
     })
 

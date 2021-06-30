@@ -6,7 +6,7 @@ import { createTokens } from "./createTokens"
 
 export const authChecker: AuthChecker<ExpressContext> = async ({
   context: { req, res, em },
-}) => {
+}): Promise<boolean> => {
   try {
     const accessToken = (req.header("Authorization") as string).replace(
       "Bearer ",
@@ -14,7 +14,7 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
     )
     const refreshToken = req.header("refresh-token") as string
 
-    // Guard for neither
+    // Guard for neither token exists
     if (!accessToken && !refreshToken) return false
 
     // Check accessToken is valid
@@ -27,7 +27,7 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
       const { id } = verified
       const user = await em.findOne(User, { id })
 
-      // Guard for
+      // Guard for user not exist
       if (!user) return false
       res.locals.user = user
 
@@ -49,10 +49,10 @@ export const authChecker: AuthChecker<ExpressContext> = async ({
 
     const user = (await em.findOne(User, { id })) as User
 
-    // invalid token
+    // Invalid token or user not exist
     if (!user || user.refreshTokenCount !== refreshTokenCount) return false
 
-    // valid refreshToken
+    // Valid refreshToken so send new token pair
     const { refreshToken: newRefreshToken, accessToken: newAccessToken } =
       createTokens(user)
 
