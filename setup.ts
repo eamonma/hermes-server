@@ -63,6 +63,31 @@ const envQuestions: PromptObject[] = [
     name: "oauthSecret",
     message: "Google OAuth secret?",
   },
+  {
+    type: "text",
+    name: "awsSecretAccessKey",
+    message: "AWS secret access key?",
+  },
+  {
+    type: "text",
+    name: "awsAccessKeyId",
+    message: "AWS access key ID?",
+  },
+  {
+    type: "text",
+    name: "awsEndpoint",
+    message: "AWS endpoint?",
+  },
+  {
+    type: "text",
+    name: "sendgridApiKey",
+    message: "Sendgrid API key?",
+  },
+  {
+    type: "text",
+    name: "sendgridSender",
+    message: "Sendgrid verified sender?",
+  },
 ]
 
 const configQuestions: PromptObject[] = [
