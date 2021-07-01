@@ -3,8 +3,6 @@ import {
   ManyToOne,
   Property,
   SerializedPrimaryKey,
-  IdentifiedReference,
-  Reference,
 } from "@mikro-orm/core"
 import { Field, ID, ObjectType } from "type-graphql"
 import { Base } from "./Base"
@@ -23,7 +21,11 @@ export default class File extends Base<File> {
 
   @Field()
   @Property()
-  key: string
+  mime: string
+
+  @Field(type => String, { nullable: true })
+  @Property()
+  key?: string
 
   // @Field(type => Project)
   // @ManyToOne(type => Project, { wrappedReference: true })

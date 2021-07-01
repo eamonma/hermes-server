@@ -9,7 +9,7 @@ import "reflect-metadata"
 import { buildSchema } from "type-graphql"
 import ormConfig from "../orm.config"
 import { ExpressContext } from "./contexts/ExpressContext"
-import { UploadResolver } from "./modules/file/Upload"
+import { FileResolver } from "./modules/file/File"
 import { ProjectResolver } from "./modules/project/Project"
 import { authChecker } from "./modules/user/authChecker"
 import { AuthorizationResolver } from "./modules/user/Authorization"
@@ -39,7 +39,7 @@ export default class Application {
         LoginResolver,
         RegisterResolver,
         AuthorizationResolver,
-        UploadResolver,
+        FileResolver,
         ProjectResolver,
       ],
       authChecker,

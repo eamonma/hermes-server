@@ -1,9 +1,19 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Info,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql"
 import { ExpressContext } from "../../contexts/ExpressContext"
 import Project from "../../entities/Project"
 import File from "../../entities/File"
 import { createProjectPassphrase } from "./createProjectPassphrase"
 import { wrap } from "@mikro-orm/core"
+import { GraphQLResolveInfo } from "graphql"
+import fieldsToRelations from "graphql-fields-to-relations"
 
 @Resolver(type => Project)
 export class ProjectResolver {
@@ -13,14 +23,19 @@ export class ProjectResolver {
   async getProject(
     @Arg("id") id: string,
     @Arg("client") client: boolean,
-    @Arg("passphrase", { nullable: true }) passphrase: string,
+    @Arg("passphrase", { nullable: true }) passphrase: string = "",
     @Ctx() ctx: ExpressContext
   ): Promise<Project | null> {
-    // If client requesting, passphrase is present, so find project with passphrase
-    if (client) return await ctx.em.findOne(Project, { id, passphrase })
-
+    let project: Project
+    // If client requesting, passphrase should be present, so find project with passphrase
+    if (client)
+      project = (await ctx.em.findOne(Project, { id, passphrase })) as Project
     // If admin requesting, passphrase is not present, but auth'd so ok
-    return await ctx.em.findOne(Project, { id })
+    else project = (await ctx.em.findOne(Project, { id })) as Project
+
+    await project.files.init()
+
+    return project
   }
 
   // createProject
@@ -48,25 +63,32 @@ export class ProjectResolver {
   async addFileToProject(
     @Arg("fileId") fileId: string,
     @Arg("projectId") projectId: string,
-    @Ctx() ctx: ExpressContext
+    @Ctx() ctx: ExpressContext,
+    @Info() info: GraphQLResolveInfo
   ): Promise<Project | null> {
     const project = (await ctx.em.findOne(Project, {
       id: projectId,
     })) as Project
-    const file = (await ctx.em.findOne(File, { id: fileId })) as File
+    // const file = (await ctx.em.findOne(File, { id: fileId }, fieldsToRelations)) as File
+    const file = (await ctx.em.findOne(
+      File,
+      { id: fileId },
+      fieldsToRelations(info, { root: "project" })
+    )) as File
 
-    // Add file to project
-    wrap(project).assign({ files: [...project.files, file] })
-    // Set project to file
-    wrap(file).assign({
-      project: projectId,
-    })
-
-    await ctx.em.persist(project).flush()
-    await ctx.em.persist(file).flush()
+    // // Add file to project
+    // wrap(project).assign({ files: [...project.files, file] })
+    // // Set project to file
+    // wrap(file).assign({
+    //   project,
+    // })
 
     // Populate files field on project
     await project.files.init()
+    project.files.add(file)
+
+    await ctx.em.persist(project).flush()
+    await ctx.em.persist(file).flush()
 
     return project
   }

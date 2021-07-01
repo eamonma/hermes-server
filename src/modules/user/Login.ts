@@ -1,25 +1,19 @@
 import argon2 from "argon2"
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Mutation,
-  ObjectType,
-  Query,
-  Resolver,
-} from "type-graphql"
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
 @Resolver(type => User)
 export class LoginResolver {
+  // Sample authorized query
   @Authorized()
   @Query()
   topSecret(): string {
     return `Top secret number: ${Math.floor(Math.random() * 10)}`
   }
 
+  // Sample non-authorized query
   @Query()
   datetime(): string {
     return new Date().toISOString()
@@ -35,7 +29,7 @@ export class LoginResolver {
   async login(
     @Arg("email") email: string,
     @Arg("password") password: string,
-    @Ctx() { req, res, em }: ExpressContext
+    @Ctx() { res, em }: ExpressContext
   ): Promise<User | null> {
     const user = (await em.findOne(User, { email })) as User
     if (!user) return null

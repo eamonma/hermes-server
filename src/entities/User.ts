@@ -1,7 +1,6 @@
 import { Entity, Property, SerializedPrimaryKey } from "@mikro-orm/core"
 import { IsEmail } from "class-validator"
 import { Field, ID, ObjectType } from "type-graphql"
-import { IsDomain } from "../modules/user/register/isDomain"
 import { Base } from "./Base"
 
 @ObjectType()

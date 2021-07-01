@@ -1,5 +1,5 @@
 import argon2 from "argon2"
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql"
+import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql"
 import config from "../../../app.config.json"
 import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entities/User"
@@ -12,7 +12,7 @@ export class RegisterResolver {
   @Mutation(type => User)
   @UseMiddleware(Disabled(!config.registration))
   async register(
-    @Arg("input") { name, email, password }: RegisterInput,
+    @Args() { name, email, password }: RegisterInput,
     @Ctx() ctx: ExpressContext
   ): Promise<User> {
     const hashedPassword = await argon2.hash(password, {
