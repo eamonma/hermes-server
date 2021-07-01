@@ -7,4 +7,5 @@ export default {
   type: "mongo",
   clientUrl: process.env.DB,
   tsNode: process.env.NODE_ENV !== "production",
+  ensureIndexes: true,
 } as Parameters<typeof MikroORM.init>[0]

@@ -1,4 +1,5 @@
 import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core"
+import { MongoDriver } from "@mikro-orm/mongodb"
 import { ApolloServer } from "apollo-server-express"
 import chalk from "chalk"
 import cors from "cors"
@@ -23,9 +24,9 @@ export default class Application {
   app: express.Application
   server: Server
 
-  async connect(): Promise<void> {
+  async connect(config: any = ormConfig): Promise<void> {
     try {
-      this.orm = await MikroORM.init(ormConfig)
+      this.orm = await MikroORM.init<MongoDriver>(config)
     } catch (error) {
       console.error(chalk.red("📌 Could not connect to the database"), error)
       throw Error(error as string)
