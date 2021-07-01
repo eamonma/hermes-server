@@ -4,9 +4,13 @@ import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
-export const authChecker: AuthChecker<ExpressContext> = async ({
-  context: { req, res, em },
-}): Promise<boolean> => {
+export const authChecker: AuthChecker<ExpressContext> = async (
+  { context: { req, res, em }, args: { client } },
+  roles
+): Promise<boolean> => {
+  if (client) {
+    return true
+  }
   try {
     const accessToken = (req.header("Authorization") as string).replace(
       "Bearer ",

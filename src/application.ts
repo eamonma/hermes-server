@@ -10,7 +10,7 @@ import { buildSchema } from "type-graphql"
 import ormConfig from "../orm.config"
 import { ExpressContext } from "./contexts/ExpressContext"
 import { UploadResolver } from "./modules/file/Upload"
-import { CreateProjectResolver } from "./modules/project/CreateProject"
+import { ProjectResolver } from "./modules/project/Project"
 import { authChecker } from "./modules/user/authChecker"
 import { AuthorizationResolver } from "./modules/user/Authorization"
 import { LoginResolver } from "./modules/user/Login"
@@ -40,7 +40,7 @@ export default class Application {
         RegisterResolver,
         AuthorizationResolver,
         UploadResolver,
-        CreateProjectResolver,
+        ProjectResolver,
       ],
       authChecker,
     })

@@ -1,10 +1,11 @@
 import {
+  Collection,
   Entity,
   OneToMany,
   Property,
   SerializedPrimaryKey,
 } from "@mikro-orm/core"
-import { Field, ID, ObjectType } from "type-graphql"
+import { Authorized, Field, ID, ObjectType } from "type-graphql"
 import { Base } from "./Base"
 import File from "./File"
 
@@ -19,10 +20,16 @@ export default class Project extends Base<Project> {
   @Property()
   name: string
 
+  @Field()
+  @Property()
+  client: string
+
+  @Field()
+  @Authorized()
   @Property()
   passphrase: string
 
-  @Field(type => [File])
+  @Field(type => [File], { nullable: true })
   @OneToMany(type => File, (file: File) => file.project)
-  files: File[]
+  files = new Collection<File>(this)
 }

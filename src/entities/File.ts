@@ -25,12 +25,16 @@ export default class File extends Base<File> {
   @Property()
   key: string
 
-  @Field(type => Project)
-  @ManyToOne(type => Project, { wrappedReference: true })
-  project: IdentifiedReference<Project>
+  // @Field(type => Project)
+  // @ManyToOne(type => Project, { wrappedReference: true })
+  // project: IdentifiedReference<Project>
 
-  constructor(project: Project, ...args: any[]) {
-    super(...args)
-    project = Reference.create(project)
-  }
+  // constructor(project: Project, ...args: any[]) {
+  //   super(...args)
+  //   project = Reference.create(project)
+  // }
+
+  @Field(type => Project)
+  @ManyToOne(type => Project)
+  project: Project
 }

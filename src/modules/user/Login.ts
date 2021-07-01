@@ -12,8 +12,7 @@ import { ExpressContext } from "../../contexts/ExpressContext"
 import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
-@Resolver()
-@ObjectType()
+@Resolver(type => User)
 export class LoginResolver {
   @Authorized()
   @Query()

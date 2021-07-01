@@ -7,7 +7,7 @@ import { Disabled } from "../Disabled"
 import { createTokens } from "./createTokens"
 import { RegisterInput } from "./register/RegisterInput"
 
-@Resolver()
+@Resolver(type => User)
 export class RegisterResolver {
   @Mutation(type => User)
   @UseMiddleware(Disabled(!config.registration))
