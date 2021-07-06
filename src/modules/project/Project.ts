@@ -19,16 +19,16 @@ import fieldsToRelations from "graphql-fields-to-relations"
 export class ProjectResolver {
   // getProject
   @Query(type => Project, { nullable: true })
-  @Authorized("client")
+  @Authorized("clientRequesting")
   async getProject(
     @Arg("id") id: string,
-    @Arg("client") client: boolean,
+    @Arg("clientRequesting") clientRequesting: boolean,
     @Arg("passphrase", { nullable: true }) passphrase: string = "",
     @Ctx() ctx: ExpressContext
   ): Promise<Project | null> {
     let project: Project
     // If client requesting, passphrase should be present, so find project with passphrase
-    if (client)
+    if (clientRequesting)
       project = (await ctx.em.findOne(Project, { id, passphrase })) as Project
     // If admin requesting, passphrase is not present, but auth'd so ok
     else project = (await ctx.em.findOne(Project, { id })) as Project
@@ -51,6 +51,10 @@ export class ProjectResolver {
       client,
       passphrase: createProjectPassphrase(),
     })
+
+    // console.log(ctx.res.locals.user)
+
+    wrap(project).assign({ owner: ctx.res.locals.user }, { em: ctx.em })
 
     await ctx.em.persist(project).flush()
 

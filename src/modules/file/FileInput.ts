@@ -12,4 +12,7 @@ export class FileInput {
 
   @Field()
   projectId: string
+
+  @Field()
+  key: string
 }

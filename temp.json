@@ -1,0 +1,6 @@
+[{
+	"allowedOperations": [
+		" s3_put ", " b2_upload_part "
+	],
+	" allowedOrigins ": [" * "]
+}]

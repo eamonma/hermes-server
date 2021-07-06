@@ -10,6 +10,7 @@ import { RegisterInput } from "./register/RegisterInput"
 @Resolver(type => User)
 export class RegisterResolver {
   @Mutation(type => User)
+  // Disable if registration false in config
   @UseMiddleware(Disabled(!config.registration))
   async register(
     @Args() { name, email, password }: RegisterInput,

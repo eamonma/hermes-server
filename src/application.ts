@@ -56,8 +56,14 @@ export default class Application {
         } as ExpressContext),
     })
 
+    this.app.use((req, res, next) => {
+      // res.set("Access-Control-Expose-Headers", "*")
+      res.set("Access-Control-Expose-Headers", ["Token", "Refresh-Token"])
+      next()
+    })
+
     this.app.disable("x-powered-by")
-    this.app.set("Access-Control-Expose-Headers", ["Token", "Refresh-Token"])
+
     this.app.use(cors())
 
     apolloServer.applyMiddleware({ app: this.app, path: "/api" })

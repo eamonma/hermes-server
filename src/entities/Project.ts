@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  ManyToOne,
   OneToMany,
   Property,
   SerializedPrimaryKey,
@@ -9,6 +10,7 @@ import { IsEmail } from "class-validator"
 import { Authorized, Field, ID, ObjectType } from "type-graphql"
 import { Base } from "./Base"
 import File from "./File"
+import User from "./User"
 
 @ObjectType()
 @Entity()
@@ -42,4 +44,8 @@ export default class Project extends Base<Project> {
   @Field(type => [File], { nullable: true })
   @OneToMany(type => File, (file: File) => file.project)
   files = new Collection<File>(this)
+
+  @Field(type => User)
+  @ManyToOne(type => User)
+  owner: User
 }

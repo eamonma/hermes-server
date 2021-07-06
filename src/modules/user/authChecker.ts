@@ -5,10 +5,12 @@ import User from "../../entities/User"
 import { createTokens } from "./createTokens"
 
 export const authChecker: AuthChecker<ExpressContext> = async (
-  { context: { req, res, em }, args: { client } },
+  { context: { req, res, em }, args: { clientRequesting } },
   roles
 ): Promise<boolean> => {
-  if (client) {
+  // console.log(roles)
+
+  if (clientRequesting) {
     return true
   }
   try {
@@ -16,7 +18,7 @@ export const authChecker: AuthChecker<ExpressContext> = async (
       "Bearer ",
       ""
     )
-    const refreshToken = req.header("refresh-token") as string
+    const refreshToken = req.header("Refresh-Token") as string
 
     // Guard for neither token exists
     if (!accessToken && !refreshToken) return false
@@ -64,6 +66,8 @@ export const authChecker: AuthChecker<ExpressContext> = async (
       "Token": newAccessToken,
       "Refresh-Token": newRefreshToken,
     })
+
+    res.locals.user = user
 
     return true
   } catch (err) {

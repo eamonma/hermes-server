@@ -19,10 +19,12 @@ export class LoginResolver {
     return new Date().toISOString()
   }
 
-  @Query()
+  @Query(type => User)
   @Authorized()
-  me(@Ctx() ctx: ExpressContext): User {
-    return ctx.res.locals.user
+  async me(@Ctx() ctx: ExpressContext): Promise<User> {
+    const { user } = ctx.res.locals
+    await user.projects.init()
+    return user
   }
 
   @Mutation(type => User, { nullable: true })

@@ -4,7 +4,7 @@ const letters = "abcdefghijklmnopqrstuvwxyz"
 
 export const createProjectPassphrase = (
   x: number = 4,
-  y: number = 4
+  y: number = 3
 ): string => {
   let passphraseArray: string[] = []
 
