@@ -4,7 +4,7 @@ import {
   Property,
   SerializedPrimaryKey,
 } from "@mikro-orm/core"
-import { Field, ID, ObjectType, Root } from "type-graphql"
+import { Field, ID, Int, ObjectType, Root } from "type-graphql"
 import { Base } from "./Base"
 import Project from "./Project"
 /*
@@ -26,7 +26,7 @@ export default class File extends Base<File> {
   @Property()
   mime: string
 
-  @Field()
+  @Field(type => Int, { nullable: true })
   @Property()
   size: number
 

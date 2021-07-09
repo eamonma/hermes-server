@@ -1,5 +1,5 @@
 import { IsMimeType } from "class-validator"
-import { ArgsType, Field } from "type-graphql"
+import { ArgsType, Field, Int } from "type-graphql"
 
 @ArgsType()
 export class FileInput {
@@ -15,4 +15,7 @@ export class FileInput {
 
   @Field()
   key: string
+
+  @Field(type => Int, { nullable: true })
+  size: number
 }

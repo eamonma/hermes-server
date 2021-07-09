@@ -170,14 +170,15 @@ export class FileResolver {
   @Authorized()
   @Mutation(type => File)
   async createFile(
-    @Args() { name, mime, projectId, key }: FileInput,
+    @Args() { name, mime, projectId, size, key }: FileInput,
     @Ctx() ctx: ExpressContext
   ): Promise<File> {
     const project = (await ctx.em.findOne(Project, { id: projectId }, [
       "files",
     ])) as Project
 
-    const file = new File({ name, mime, key })
+    const file = new File({ name, mime, size, key })
+
     wrap(file).assign({ project }, { em: ctx.em })
 
     await ctx.em.persist(file).flush()
@@ -194,19 +195,10 @@ export class FileResolver {
     const file = await ctx.em.findOneOrFail(File, { id })
 
     await s3
-      .deleteObject(
-        {
-          Bucket,
-          Key: file.key,
-        },
-        (e, data) => {
-          if (e) {
-            console.log(e)
-            return false
-          }
-          console.log(data)
-        }
-      )
+      .deleteObject({
+        Bucket,
+        Key: file.key,
+      })
       .promise()
 
     await ctx.em.remove(file).flush()
