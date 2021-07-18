@@ -12,12 +12,21 @@ import { Base } from "./Base"
 import File from "./File"
 import User from "./User"
 
+import { customAlphabet } from "nanoid"
+const alphabet =
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+const nanoid = customAlphabet(alphabet, 10)
+
 @ObjectType()
 @Entity()
 export default class Project extends Base<Project> {
   @Field(type => ID)
   @SerializedPrimaryKey()
   id!: string
+
+  @Field(type => String)
+  @Property()
+  shortId: string = nanoid()
 
   @Field()
   @Property()

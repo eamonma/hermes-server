@@ -21,17 +21,40 @@ export class ProjectResolver {
   @Query(type => Project, { nullable: true })
   @Authorized("clientRequesting")
   async getProject(
-    @Arg("id") id: string,
+    @Arg("id", { nullable: true }) id: string,
+    @Arg("shortId", { nullable: true }) shortId: string,
     @Arg("clientRequesting") clientRequesting: boolean,
     @Arg("passphrase", { nullable: true }) passphrase: string = "",
     @Ctx() ctx: ExpressContext
   ): Promise<Project | null> {
     let project: Project
+
+    let identifier: string
+    let identity: string
+
+    console.log({ id, shortId })
+
+    if (!id && !shortId) return null
+
+    if (id) {
+      identifier = "id"
+      identity = id
+    } else {
+      identifier = "shortId"
+      identity = shortId
+    }
+
     // If client requesting, passphrase should be present, so find project with passphrase
     if (clientRequesting)
-      project = (await ctx.em.findOne(Project, { id, passphrase })) as Project
+      project = (await ctx.em.findOne(Project, {
+        [identifier]: identity,
+        passphrase,
+      })) as Project
     // If admin requesting, passphrase is not present, but auth'd so ok
-    else project = (await ctx.em.findOne(Project, { id })) as Project
+    else
+      project = (await ctx.em.findOne(Project, {
+        [identifier]: identity,
+      })) as Project
 
     await project.files.init()
 

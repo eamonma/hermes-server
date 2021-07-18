@@ -1,5 +1,6 @@
 import AWS from "aws-sdk"
 import S3 from "aws-sdk/clients/s3"
+import "dotenv/config"
 
 const endpoint = new AWS.Endpoint(process.env.AWS_ENDPOINT as string)
 
