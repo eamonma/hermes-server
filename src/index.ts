@@ -3,20 +3,22 @@ import { existsSync } from "fs"
 import "dotenv/config"
 import "reflect-metadata"
 
-// Check environment and configuration exist
-const envExists = existsSync(".env")
-const configExists = existsSync("app.config.json")
-const bothExist = envExists && configExists
+if (process.env.NODE_ENV !== "production") {
+  // Check environment and configuration exist
+  const envExists = existsSync(".env")
+  const configExists = existsSync("app.config.json")
+  const bothExist = envExists && configExists
 
-const existsString = `${!envExists ? ".env" : ""}${
-  !envExists && !configExists ? " and " : ""
-}${!configExists ? "app.config.json" : ""} ${
-  !envExists && !configExists ? "don't" : "doesn't"
-} exist. Run ${chalk.green("npm run setup")} to setup.`
+  const existsString = `${!envExists ? ".env" : ""}${
+    !envExists && !configExists ? " and " : ""
+  }${!configExists ? "app.config.json" : ""} ${
+    !envExists && !configExists ? "don't" : "doesn't"
+  } exist. Run ${chalk.green("npm run setup")} to setup.`
 
-if (!bothExist) {
-  console.log(existsString)
-  process.exit()
+  if (!bothExist) {
+    console.log(existsString)
+    process.exit()
+  }
 }
 
 // Run app
